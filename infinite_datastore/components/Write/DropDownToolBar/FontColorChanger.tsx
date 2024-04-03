@@ -4,12 +4,8 @@ import React from 'react'
 import { Palette } from "lucide-react"
 import { cn } from '@/lib/utils';
 import { ColorResult, SketchPicker } from 'react-color';
-interface FontColorChangerProps {
-    color: ColorResult
-    colorPaletteOpen: boolean
-    setColorPaletteOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setColor: React.Dispatch<React.SetStateAction<ColorResult>>
-}
+import { FontColorChangerProps } from '@/lib/interfaces';
+
 
 export const FontColorChanger: React.FC<FontColorChangerProps> = ({ color, colorPaletteOpen, setColorPaletteOpen, setColor }) => {
     return (

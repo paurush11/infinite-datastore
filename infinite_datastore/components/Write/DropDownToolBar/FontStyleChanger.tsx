@@ -3,11 +3,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import React from 'react'
 import { CaseSensitive } from "lucide-react"
 import { cn } from '@/lib/utils';
+import { FontStyleChangerProps } from '@/lib/interfaces';
 
-interface FontStyleChangerProps {
-    fontStyleOpen: boolean
-    setFontStyleOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+
 const fontTypes = [
     {
         value: "title",

@@ -1,16 +1,13 @@
 "use client";
 
+import { TextAreaProps } from '@/lib/interfaces';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
-import React from 'react'
-import { operationTypeKeys } from '../MainContent';
+import React from 'react';
 import { Button } from '../ui/button';
 import { Dropdown } from './Dropdown';
 
-interface TextAreaProps {
-    selectOperationType: operationTypeKeys
-    setSelectOperationType: React.Dispatch<React.SetStateAction<operationTypeKeys>>
-}
+
 
 export const TextArea: React.FC<TextAreaProps> = ({ selectOperationType, setSelectOperationType }) => {
     const [open, setOpen] = React.useState(false);

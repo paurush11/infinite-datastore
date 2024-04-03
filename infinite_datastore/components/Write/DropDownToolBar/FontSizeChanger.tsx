@@ -2,21 +2,13 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import React from 'react'
 import { AArrowUp } from "lucide-react"
+import { FontSizeChangerProps, TfontSizeAndType } from '@/lib/interfaces';
 
 
-interface FontSizeChangerProps {
-    fontSizeOpen: boolean
-    fontSize: TfontSizeAndType
-    setFontSize: React.Dispatch<React.SetStateAction<TfontSizeAndType>>
-    setFontSizeOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
 const baseFontSize = 14; // Base font size for text-sm
 const baseLineHeight = 20; // Base line height for text-sm
 const maxTypes = 6;
-export type TfontSizeAndType = {
-    fontSize: number,
-    lineHeight: number
-}
+
 export const calculateSize = (scale: number): TfontSizeAndType => {
     // Assuming each scale step increases font size by 15% and line height by 10%
     return {

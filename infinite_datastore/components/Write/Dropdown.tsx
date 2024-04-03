@@ -1,29 +1,23 @@
+import { DropdownProps, TfontSizeAndType } from '@/lib/interfaces';
 import { cn } from '@/lib/utils';
-import React, { useState } from 'react'
-import { operationTypeKeys } from '../MainContent';
+import { PaintRoller, Table } from 'lucide-react';
+import React, { useState } from 'react';
+import { ColorResult } from 'react-color';
 import { Button } from '../ui/button';
-import { AArrowUp, CaseSensitive, ListChecks, PaintRoller, Palette, Table } from 'lucide-react';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '../ui/dropdown-menu';
-import { HSLColor, RGBColor, ColorResult, SketchPicker, SliderPicker } from 'react-color';
 import { FontColorChanger } from './DropDownToolBar/FontColorChanger';
-import { ListTypeChanger } from './DropDownToolBar/ListTypeChanger';
+import { FontSizeChanger, calculateSize } from './DropDownToolBar/FontSizeChanger';
 import { FontStyleChanger } from './DropDownToolBar/FontStyleChanger';
-import { FontSizeChanger, TfontSizeAndType, calculateSize } from './DropDownToolBar/FontSizeChanger';
-
-interface DropdownProps {
-    selectOperationType: operationTypeKeys
-}
+import { ListTypeChanger } from './DropDownToolBar/ListTypeChanger';
 
 
 
-export type Color = string | HSLColor | RGBColor;
 export const Dropdown: React.FC<DropdownProps> = ({ selectOperationType }) => {
-    const [fontStyleOpen, setFontStyleOpen] = React.useState(false)
-    const [listTypeOpen, setListTypeOpen] = React.useState(false)
-    const [colorPaletteOpen, setColorPaletteOpen] = React.useState(false)
-    const [fontSizeOpen, setFontSizeOpen] = React.useState(false)
-    const [value, setValue] = React.useState(false)
-    const [fontSize, setFontSize] = React.useState<TfontSizeAndType>(calculateSize(1));
+    const [fontStyleOpen, setFontStyleOpen] = useState<boolean>(false)
+    const [listTypeOpen, setListTypeOpen] = useState<boolean>(false)
+    const [colorPaletteOpen, setColorPaletteOpen] = useState<boolean>(false)
+    const [fontSizeOpen, setFontSizeOpen] = useState<boolean>(false)
+    const [value, setValue] = useState<boolean>(false)
+    const [fontSize, setFontSize] = useState<TfontSizeAndType>(calculateSize(1));
 
 
     const [color, setColor] = useState<ColorResult>({

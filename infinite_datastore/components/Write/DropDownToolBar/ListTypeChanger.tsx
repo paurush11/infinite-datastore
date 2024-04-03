@@ -3,11 +3,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import React from 'react'
 import { ListChecks } from "lucide-react"
 import { cn } from '@/lib/utils';
+import { ListTypeChangerProps } from '@/lib/interfaces';
 
-interface ListTypeChangerProps {
-    listTypeOpen: boolean
-    setListTypeOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
+
 const listypes = [
     {
         value: "numbered",

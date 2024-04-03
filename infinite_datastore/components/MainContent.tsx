@@ -5,17 +5,13 @@ import { cn } from '@/lib/utils';
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import { PaintArea } from './Paint/PaintArea';
 import { TextArea } from './Write/TextArea';
+import { operationTypeKeys } from '@/lib/interfaces';
 
 
 interface MainContentProps {
 
 }
-const operationType = {
-    "Write": "WRITE",
-    "Paint": "PAINT",
-    "Empty": "EMPTY"
-} as const;
-export type operationTypeKeys = keyof typeof operationType;
+
 
 export const MainContent: React.FC<MainContentProps> = ({ }) => {
     const [selectOperationType, setSelectOperationType] = useState<operationTypeKeys>("Empty");
