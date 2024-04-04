@@ -6,19 +6,16 @@ const operationType = {
 } as const;
 export type operationTypeKeys = keyof typeof operationType;
 export interface TextAreaProps {
-    selectOperationType: operationTypeKeys
-    setSelectOperationType: React.Dispatch<React.SetStateAction<operationTypeKeys>>
 }
 
 export interface DropdownProps {
-    selectOperationType: operationTypeKeys
 }
+export interface PaintAreaProps {
 
+}
 export interface FontColorChangerProps {
-    color: ColorResult
     colorPaletteOpen: boolean
     setColorPaletteOpen: React.Dispatch<React.SetStateAction<boolean>>
-    setColor: React.Dispatch<React.SetStateAction<ColorResult>>
 }
 
 export type TfontSizeAndType = {

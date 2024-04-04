@@ -4,6 +4,7 @@ import React from 'react'
 import { CaseSensitive } from "lucide-react"
 import { cn } from '@/lib/utils';
 import { FontStyleChangerProps } from '@/lib/interfaces';
+import { fontStyleName, useFontStyleStore } from '@/Store/useFontStyleStore';
 
 
 const fontTypes = [
@@ -33,6 +34,7 @@ const fontTypes = [
     },
 ]
 export const FontStyleChanger: React.FC<FontStyleChangerProps> = ({ fontStyleOpen, setFontStyleOpen }) => {
+    const fontStore = useFontStyleStore();
     return (
         <DropdownMenu open={fontStyleOpen} onOpenChange={setFontStyleOpen}>
             <DropdownMenuTrigger asChild>
@@ -46,13 +48,15 @@ export const FontStyleChanger: React.FC<FontStyleChangerProps> = ({ fontStyleOpe
                     <DropdownMenuSeparator />
                     {fontTypes && fontTypes.map((type, idx) => {
                         return (
-                            <DropdownMenuItem key={idx} className={cn({
-                                "text-xl": type.value === "heading",
-                                "text-2xl": type.value === "title",
-                                "text-lg": type.value === "subheading",
-                                "text-sm": type.value === "body",
-                                "font-mono": type.value === "monostyled"
-                            })} >
+                            <DropdownMenuItem key={idx}
+                                onClick={() => fontStore.update(type.value as fontStyleName)}
+                                className={cn({
+                                    "text-xl": type.value === "heading",
+                                    "text-2xl": type.value === "title",
+                                    "text-lg": type.value === "subheading",
+                                    "text-sm": type.value === "body",
+                                    "font-mono": type.value === "monostyled"
+                                })} >
                                 {type.label}
                             </DropdownMenuItem >
                         )

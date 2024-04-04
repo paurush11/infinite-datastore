@@ -5,9 +5,11 @@ import { Palette } from "lucide-react"
 import { cn } from '@/lib/utils';
 import { ColorResult, SketchPicker } from 'react-color';
 import { FontColorChangerProps } from '@/lib/interfaces';
+import { useTextColorStore } from '@/Store/useTextColorStore';
 
 
-export const FontColorChanger: React.FC<FontColorChangerProps> = ({ color, colorPaletteOpen, setColorPaletteOpen, setColor }) => {
+export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPaletteOpen, setColorPaletteOpen }) => {
+    const colorStore = useTextColorStore()
     return (
         <DropdownMenu open={colorPaletteOpen} onOpenChange={setColorPaletteOpen}>
             <DropdownMenuTrigger asChild>
@@ -17,15 +19,16 @@ export const FontColorChanger: React.FC<FontColorChangerProps> = ({ color, color
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
                 <DropdownMenuLabel className={cn({})} style={{
-                    color: color.hex
+                    color: colorStore.color.hex
                 }}>Color</DropdownMenuLabel>
                 <DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     <DropdownMenuItem>
                         <SketchPicker
-                            color={color.rgb}
+                            color={colorStore.color.rgb}
                             onChange={(color: ColorResult, event) => {
-                                setColor(color)
+
+                                colorStore.update(color);
                             }}
                         />
 

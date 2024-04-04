@@ -1,36 +1,34 @@
-import React from 'react'
-import { operationTypeKeys } from '../MainContent';
-import { Button } from '../ui/button';
+import { useOperationStore } from '@/Store/useOperationStore';
+import { PaintAreaProps } from '@/lib/interfaces';
 import { cn } from '@/lib/utils';
 import { ChevronLeft } from 'lucide-react';
+import React from 'react';
+import { Button } from '../ui/button';
 
-interface PaintAreaProps {
-    selectOperationType: operationTypeKeys
-    setSelectOperationType: React.Dispatch<React.SetStateAction<operationTypeKeys>>
-}
 
-export const PaintArea: React.FC<PaintAreaProps> = ({ selectOperationType, setSelectOperationType }) => {
+export const PaintArea: React.FC<PaintAreaProps> = ({ }) => {
+    const operationStore = useOperationStore();
     return (
         <div className="flex bg-slate-800 items-center justify-center" style={{
             transition: 'flex-grow 0.5s ease',
-            flexGrow: (selectOperationType === "Paint" || selectOperationType === "Empty") ? 1 : 0,
-            height: (selectOperationType === "Write") ? "5vh" : "auto"
+            flexGrow: (operationStore.operation === "Paint" || operationStore.operation === "Empty") ? 1 : 0,
+            height: (operationStore.operation === "Write") ? "5vh" : "auto"
         }}>
             <Button variant={"outline"}
                 className={cn({
-                    'hidden': selectOperationType !== "Empty"
+                    'hidden': operationStore.operation !== "Empty"
                 })}
                 onClick={() => {
-                    setSelectOperationType("Paint")
+                    operationStore.update("Paint");
                 }}>
                 Paint
             </Button>
             <Button variant="custom" size="icon"
                 className={cn({
-                    'hidden': selectOperationType === "Empty" || selectOperationType === "Paint"
+                    'hidden': operationStore.operation === "Empty" || operationStore.operation === "Paint"
                 })}
                 onClick={() => {
-                    setSelectOperationType("Empty")
+                    operationStore.update("Empty");
                 }}>
                 <ChevronLeft className="h-4 w-4" />
             </Button>
