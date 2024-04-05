@@ -28,7 +28,7 @@ export const ListTypeChanger: React.FC<ListTypeChangerProps> = ({ listTypeOpen, 
     return (
         <DropdownMenu open={listTypeOpen} onOpenChange={setListTypeOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" >
+                <Button className='p-2 m-4' variant="outline" size="icon" >
                     <ListChecks className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>

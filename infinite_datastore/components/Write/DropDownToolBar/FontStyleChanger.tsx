@@ -4,7 +4,8 @@ import React from 'react'
 import { CaseSensitive } from "lucide-react"
 import { cn } from '@/lib/utils';
 import { FontStyleChangerProps } from '@/lib/interfaces';
-import { fontStyleName, useFontStyleStore } from '@/Store/useFontStyleStore';
+import { fontStyleName, fontStylesCssMap, fontStylesMap, useFontStyleStore } from '@/Store/useFontStyleStore';
+import { useTextSelectionStore } from '@/Store/useSelectText';
 
 
 const fontTypes = [
@@ -35,10 +36,11 @@ const fontTypes = [
 ]
 export const FontStyleChanger: React.FC<FontStyleChangerProps> = ({ fontStyleOpen, setFontStyleOpen }) => {
     const fontStore = useFontStyleStore();
+    const { isTextSelected, setSelectedTextFontStyle } = useTextSelectionStore();
     return (
         <DropdownMenu open={fontStyleOpen} onOpenChange={setFontStyleOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" >
+                <Button className='p-2' variant="outline" size="icon" >
                     <CaseSensitive className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
@@ -49,7 +51,15 @@ export const FontStyleChanger: React.FC<FontStyleChangerProps> = ({ fontStyleOpe
                     {fontTypes && fontTypes.map((type, idx) => {
                         return (
                             <DropdownMenuItem key={idx}
-                                onClick={() => fontStore.update(type.value as fontStyleName)}
+                                onClick={() => {
+                                    if (isTextSelected) {
+                                        setSelectedTextFontStyle(fontStylesCssMap[type.value as fontStyleName])
+                                    } else {
+                                        fontStore.update(type.value as fontStyleName)
+                                    }
+
+                                }
+                                }
                                 className={cn({
                                     "text-xl": type.value === "heading",
                                     "text-2xl": type.value === "title",

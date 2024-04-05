@@ -4,6 +4,7 @@ import React from 'react'
 import { AArrowUp } from "lucide-react"
 import { FontSizeChangerProps } from '@/lib/interfaces';
 import { calculateSize, useFontSizeStore } from '@/Store/useFontSizeStore';
+import { useTextSelectionStore } from '@/Store/useSelectText';
 
 
 // Base line height for text-sm
@@ -12,10 +13,11 @@ const maxTypes = 6;
 export const FontSizeChanger: React.FC<FontSizeChangerProps> = ({ fontSizeOpen, setFontSizeOpen, fontSize, setFontSize }) => {
     const items = Array.from({ length: maxTypes }, (_, i) => calculateSize(i));
     const fontStore = useFontSizeStore();
+    const { isTextSelected, setSelectedTextFontSize } = useTextSelectionStore();
     return (
         <DropdownMenu open={fontSizeOpen} onOpenChange={setFontSizeOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" >
+                <Button className='p-2 m-4' variant="outline" size="icon" >
                     <AArrowUp className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
@@ -26,7 +28,12 @@ export const FontSizeChanger: React.FC<FontSizeChangerProps> = ({ fontSizeOpen, 
                     {
                         items && items.map((val, idx) => {
                             return <DropdownMenuItem key={idx} onClick={() => {
-                                fontStore.update(val);
+                                if (isTextSelected) {
+                                    setSelectedTextFontSize(val);
+                                } else {
+                                    fontStore.update(val);
+                                }
+
                             }}>
                                 {val.fontSize}
                             </DropdownMenuItem>

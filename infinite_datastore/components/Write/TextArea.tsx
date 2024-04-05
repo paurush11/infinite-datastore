@@ -1,45 +1,15 @@
-"use client";
-
+import { useOperationStore } from '@/Store/useOperationStore';
 import { TextAreaProps } from '@/lib/interfaces';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Button } from '../ui/button';
-import { Dropdown } from './Dropdown';
-import { tailwindClassToPixels, useFontSizeStore } from '@/Store/useFontSizeStore';
-import { useFontStyleStore } from '@/Store/useFontStyleStore';
-import { useTextColorStore } from '@/Store/useTextColorStore';
-import { useOperationStore } from '@/Store/useOperationStore';
-
+import { RichTextEditor } from './RichTextEditor';
 
 
 export const TextArea: React.FC<TextAreaProps> = ({ }) => {
-    const [open, setOpen] = useState(false);
-    const [selectedText, setSelectedText] = useState('');
-    const textareaRef = useRef<HTMLDivElement>(null);
-    const getSelectedText = () => {
-        const textarea = textareaRef.current;
-        if (!textarea) return;
-        const selection = window.getSelection();
-        if (!selection?.rangeCount) return ''; // No selection made
-        const range = selection.getRangeAt(0);
-        const selectedText = range.toString();
-        setSelectedText(selectedText);
-    };
-    const fontSizeStore = useFontSizeStore();
-    const fontStyleStore = useFontStyleStore();
-    const textColorStore = useTextColorStore();
-    const operationStore = useOperationStore();
-    const values = Object.values(fontStyleStore.fontStyle);
-    const [fontSize, setFontSize] = useState(fontSizeStore.fontSize.fontSize);
-    useEffect(() => {
-        const numericFontSize = tailwindClassToPixels(fontStyleStore.fontStyle.fontSize);
-        setFontSize(numericFontSize)
-    }, [fontStyleStore])
-    useEffect(() => {
-        setFontSize(fontSizeStore.fontSize.fontSize)
-    }, [fontSizeStore])
 
+    const operationStore = useOperationStore();
     return (
         <div className="flex flex-col bg-slate-300  items-center justify-center" style={{
             transition: 'flex-grow 0.5s ease',
@@ -70,20 +40,7 @@ export const TextArea: React.FC<TextAreaProps> = ({ }) => {
                 'hidden': operationStore.operation !== "Write",
                 'flex w-full flex-1 h-full p-10': operationStore.operation === "Write",
             },)}>
-                <div
-                    contentEditable={true}
-                    suppressContentEditableWarning={true}
-                    ref={textareaRef}
-                    onMouseUp={getSelectedText}
-                    onKeyUpCapture={getSelectedText}
-                    className={cn('w-full h-full caret-black rounded bg-inherit p-3 focus:outline-none ', ...values)}
-                    style={{
-                        fontSize: fontSize,
-                        color: textColorStore.color.hex
-                    }}
-                >
-                    "Type something..."
-                </div>
+                <RichTextEditor />
             </div>
         </div>
     );

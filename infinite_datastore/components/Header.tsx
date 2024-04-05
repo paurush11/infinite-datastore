@@ -15,6 +15,7 @@ export const Header: React.FC<HeaderProps> = ({ }) => {
             <Button variant={"outline"}>Modify Link</Button>
             <div className="flex ml-auto w-full" />
             <Dropdown />
+            {/* <Dropdown /> // not responsive */}
             <Button variant={"outline"}>Theme</Button>
         </div>
     );

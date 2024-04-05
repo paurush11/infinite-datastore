@@ -6,14 +6,16 @@ import { cn } from '@/lib/utils';
 import { ColorResult, SketchPicker } from 'react-color';
 import { FontColorChangerProps } from '@/lib/interfaces';
 import { useTextColorStore } from '@/Store/useTextColorStore';
+import { useTextSelectionStore } from '@/Store/useSelectText';
 
 
 export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPaletteOpen, setColorPaletteOpen }) => {
     const colorStore = useTextColorStore()
+    const { isTextSelected, setSelectedTextColor } = useTextSelectionStore();
     return (
         <DropdownMenu open={colorPaletteOpen} onOpenChange={setColorPaletteOpen}>
             <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="icon" >
+                <Button className='p-2 m-4' variant="outline" size="icon" >
                     <Palette className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
@@ -27,8 +29,11 @@ export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPalette
                         <SketchPicker
                             color={colorStore.color.rgb}
                             onChange={(color: ColorResult, event) => {
-
-                                colorStore.update(color);
+                                if (isTextSelected) {
+                                    setSelectedTextColor(color);
+                                } else {
+                                    colorStore.update(color);
+                                }
                             }}
                         />
 
