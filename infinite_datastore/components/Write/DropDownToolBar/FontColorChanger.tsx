@@ -28,7 +28,8 @@ export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPalette
                     <DropdownMenuItem>
                         <SketchPicker
                             color={colorStore.color.rgb}
-                            onChange={(color: ColorResult, event) => {
+                            onChange={() => { }}
+                            onChangeComplete={(color: ColorResult, event) => {
                                 if (isTextSelected) {
                                     setSelectedTextColor(color);
                                 } else {

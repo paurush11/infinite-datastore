@@ -14,6 +14,8 @@ type State = {
     selectedTextColor: ColorResult
     isBold: boolean
     isItalics: boolean
+    textColorChanged: boolean
+    fontSizeChanged: boolean
 }
 type Actions = {
     setSelectedText: (text: string, range: Range | null) => void;
@@ -23,6 +25,8 @@ type Actions = {
     setSelectedTextColor: (selectedTextColor: ColorResult) => void
     setIsBold: () => void
     setIsItalics: () => void
+    resetTextColorChanged: () => void;
+    resetFontSizeChanged: () => void;
 }
 
 export const useTextSelectionStore = create<State & Actions>((set) => ({
@@ -33,8 +37,10 @@ export const useTextSelectionStore = create<State & Actions>((set) => ({
     selectedText: '',
     isBold: false,
     isItalics: false,
+    textColorChanged: false,
     selectedTextRange: null,
     isTextSelected: false,
+    fontSizeChanged: false,
     setSelectedText: (text, range) =>
         set({
             selectedText: text,
@@ -42,9 +48,11 @@ export const useTextSelectionStore = create<State & Actions>((set) => ({
             isTextSelected: text.length > 0
         }),
     setFullRange: (fullTextRange: Range | null) => set({ fullTextRange: fullTextRange }),
-    setSelectedTextFontSize: (selectedTextFontSize: TfontSizeAndType) => set({ selectedTextFontSize: selectedTextFontSize }),
+    setSelectedTextFontSize: (selectedTextFontSize: TfontSizeAndType) => set({ selectedTextFontSize: selectedTextFontSize, fontSizeChanged: true }),
     setSelectedTextFontStyle: (selectedTextFontStyle: FontStyleProperties) => set({ selectedTextFontStyle: selectedTextFontStyle }),
-    setSelectedTextColor: (selectedTextColor: ColorResult) => set({ selectedTextColor: selectedTextColor }),
+    setSelectedTextColor: (selectedTextColor: ColorResult) => set({ selectedTextColor: selectedTextColor, textColorChanged: true }),
     setIsBold: () => set((state) => ({ isBold: !state.isBold })),
     setIsItalics: () => set((state) => ({ isItalics: !state.isItalics })),
+    resetTextColorChanged: () => set({ textColorChanged: false }),
+    resetFontSizeChanged: () => set({ fontSizeChanged: false })
 }));
