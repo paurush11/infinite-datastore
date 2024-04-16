@@ -1,4 +1,5 @@
-import { operationTypeKeys } from '@/lib/interfaces'
+
+import { operationTypeKeys } from '@/types/typing'
 import { create } from 'zustand'
 
 type State = {

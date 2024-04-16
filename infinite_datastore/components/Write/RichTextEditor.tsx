@@ -6,6 +6,7 @@ import { applyFontStyleToSelectedText, getSelectedText, } from '@/lib/applySelec
 import { cn } from '@/lib/utils';
 import React, { useEffect, useRef, useState } from 'react';
 
+
 interface RichTextEditorProps {
 
 }
@@ -24,6 +25,7 @@ export const RichTextEditor: React.FC<RichTextEditorProps> = ({ }) => {
     useEffect(() => {
         applyFontStyleToSelectedText({ fontSize: selectedTextFontSize.fontSize, selectedTextColor, selectedTextFontStyle, selectedTextRange, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, fontSizeChanged, textColorChanged, textareaRef });
     }, [selectedTextFontSize, selectedTextColor, selectedTextFontStyle, isBold, isItalics])
+
 
 
     return (

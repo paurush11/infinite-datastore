@@ -2,9 +2,9 @@ import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 import React from 'react'
 import { AArrowUp } from "lucide-react"
-import { FontSizeChangerProps } from '@/lib/interfaces';
 import { calculateSize, useFontSizeStore } from '@/Store/useFontSizeStore';
 import { useTextSelectionStore } from '@/Store/useSelectText';
+import { FontSizeChangerProps } from '@/types/typing';
 
 
 // Base line height for text-sm

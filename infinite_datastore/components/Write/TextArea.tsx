@@ -1,10 +1,10 @@
 import { useOperationStore } from '@/Store/useOperationStore';
-import { TextAreaProps } from '@/lib/interfaces';
 import { cn } from '@/lib/utils';
 import { ChevronRight } from 'lucide-react';
 import React from 'react';
 import { Button } from '../ui/button';
 import { RichTextEditor } from './RichTextEditor';
+import { TextAreaProps } from '@/types/typing';
 
 
 export const TextArea: React.FC<TextAreaProps> = ({ }) => {

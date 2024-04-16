@@ -1,12 +1,10 @@
 "use client"
-import React, { useState } from 'react'
-import { Button } from './ui/button';
+import { useOperationStore } from '@/Store/useOperationStore';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight } from "lucide-react"
+import { operationTypeKeys } from '@/types/typing';
+import React, { useState } from 'react';
 import { PaintArea } from './Paint/PaintArea';
 import { TextArea } from './Write/TextArea';
-import { operationTypeKeys } from '@/lib/interfaces';
-import { useOperationStore } from '@/Store/useOperationStore';
 
 
 interface MainContentProps {
@@ -22,7 +20,7 @@ export const MainContent: React.FC<MainContentProps> = ({ }) => {
             "bg-slate-300": operationStore.operation === "Write",
             "bg-slate-800": operationStore.operation === "Paint"
         })}>
-            <TextArea  />
+            <TextArea />
             <PaintArea />
         </div>
     );

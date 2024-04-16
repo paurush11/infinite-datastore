@@ -3,9 +3,9 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem,
 import React from 'react'
 import { CaseSensitive } from "lucide-react"
 import { cn } from '@/lib/utils';
-import { FontStyleChangerProps } from '@/lib/interfaces';
 import { fontStyleName, fontStylesCssMap, fontStylesMap, useFontStyleStore } from '@/Store/useFontStyleStore';
 import { useTextSelectionStore } from '@/Store/useSelectText';
+import { FontStyleChangerProps } from '@/types/typing';
 
 
 const fontTypes = [

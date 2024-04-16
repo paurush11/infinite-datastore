@@ -17,6 +17,8 @@ type TapplyStyles = {
 
 type TapplyStylesToSpan = {
     span: HTMLSpanElement
+    isAlreadyBold: boolean
+    // isAlreadyItalic: boolean
 } & TapplyStyles;
 
 export type TapplyFontStyleToSelectedText = {
@@ -64,7 +66,7 @@ export const getSelectedText = (textareaRef: React.RefObject<HTMLDivElement>, se
     setFullRange(fullRange);
 
 };
-export const applyStylesToSpan = ({ span, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle }: TapplyStylesToSpan) => {
+export const applyStylesToSpan = ({ span, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle, isAlreadyBold }: TapplyStylesToSpan) => {
 
     if (selectedTextColor && textColorChanged) {
         span.style.color = selectedTextColor.hex
@@ -72,40 +74,44 @@ export const applyStylesToSpan = ({ span, fontSize, isItalics, isBold, resetText
     }
     if (isBold) {
         span.style.fontWeight = "bold"
+        ///reset bold
     } else {
         span.style.fontWeight = "normal"
     }
 
     if (isItalics) {
         span.style.fontStyle = "italic"
-        console.log(span.style.fontStyle)
-    } else {
-        span.style.fontStyle = "none"
+        ///reset bold
     }
 
-    if (selectedTextFontStyle) {
-        span.style.borderColor = selectedTextFontStyle.borderColor || 'black';
-        span.style.fontSize = selectedTextFontStyle.fontSize
-        if (selectedTextFontStyle.fontWeight) {
-            span.style.fontWeight = selectedTextFontStyle.fontWeight || "0"
-        }
-        span.style.fontWeight = selectedTextFontStyle.lineHeight
-        span.style.paddingLeft = selectedTextFontStyle.paddingLeft || '0px';
-        if (selectedTextFontStyle.fontStyle) {
-            span.style.fontStyle = selectedTextFontStyle.fontStyle
-        }
-        span.style.borderLeft = selectedTextFontStyle.borderLeft || "0px";
+    // if (selectedTextFontStyle) {
+    //     span.style.borderColor = selectedTextFontStyle.borderColor || 'black';
+    //     span.style.fontSize = selectedTextFontStyle.fontSize
+    //     if (selectedTextFontStyle.fontWeight) {
+    //         span.style.fontWeight = selectedTextFontStyle.fontWeight || "0"
+    //     }
+    //     span.style.fontWeight = selectedTextFontStyle.lineHeight
+    //     span.style.paddingLeft = selectedTextFontStyle.paddingLeft || '0px';
+    //     if (selectedTextFontStyle.fontStyle) {
+    //         span.style.fontStyle = selectedTextFontStyle.fontStyle
+    //     }
+    //     span.style.borderLeft = selectedTextFontStyle.borderLeft || "0px";
 
-    }
+    // }
     if (fontSize && fontSizeChanged) {
         span.style.fontSize = fontSize + "px";
         resetFontSizeChanged();
     }
 }
 
-
+const checkIfBold = (cssStr: string) => {
+    if (cssStr.includes("font-weight: bold;")) return true;
+    return false;
+}
 export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedText) => {
-    const { fontSize, selectedTextColor, resetFontSizeChanged, resetTextColorChanged, isBold, isItalics, fontSizeChanged, textColorChanged, selectedTextRange, textareaRef, selectedTextFontStyle } = params;
+    const { fontSize, selectedTextColor, resetFontSizeChanged, resetTextColorChanged, isBold, isItalics, fontSizeChanged, textColorChanged, textareaRef, selectedTextFontStyle, selectedTextRange } = params;
+
+
     if (!selectedTextRange) {
         return;
     }
@@ -118,8 +124,6 @@ export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedTe
         let styles = parent_span.outerHTML;
 
         const spanStyleParser = new SpanStyleParser(styles);
-
-        spanStyleParser.displayStyles();
         let start = selectedTextRange.startContainer as ChildNode;
         let end = selectedTextRange.endContainer as ChildNode;
 
@@ -138,6 +142,7 @@ export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedTe
         if (parent_span && start_node && end_node) {
             let curr_node = start_node;
             let contentString = "";
+            console.log(selectedTextRange.toString())
             const beforeSpan = document.createElement('span');
             beforeSpan.id = generateSpanId();
             const afterSpan = document.createElement('span')
@@ -149,14 +154,17 @@ export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedTe
                 const docSpan = document.createElement('span');
                 docSpan.id = generateSpanId();
                 if (curr_node === start_node) {
+
                     beforeSpan.textContent = curr_node.textContent?.slice(0, selectedTextRange.startOffset) || ""
                     beforeSpan.style.cssText = node?.style || "";
                     let stringToTake = curr_node.textContent?.substring(selectedTextRange.startOffset);
                     contentString += stringToTake;
                     docSpan.textContent = stringToTake || ""
-
                     docSpan.style.cssText = node?.style || "";
-                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle })
+                    let isAlreadyBold = checkIfBold(docSpan.style.cssText);
+                    console.log(isAlreadyBold)
+                    console.log(docSpan.textContent)
+                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle, isAlreadyBold })
                     elements.push(docSpan);
                 } else if (curr_node === end_node) {
                     afterSpan.textContent = curr_node.textContent?.substring(selectedTextRange.endOffset) || ""
@@ -165,14 +173,16 @@ export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedTe
                     contentString += stringToTake;
                     docSpan.textContent = stringToTake || ""
                     docSpan.style.cssText = node?.style || "";
-                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle })
+                    let isAlreadyBold = checkIfBold(docSpan.style.cssText);
+                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle, isAlreadyBold })
                     elements.push(docSpan);
                     break; // Stop the loop after processing the end node
                 } else {
                     contentString += curr_node.textContent;
                     docSpan.textContent = curr_node.textContent || ""
                     docSpan.style.cssText = node?.style || "";
-                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle })
+                    let isAlreadyBold = checkIfBold(docSpan.style.cssText);
+                    applyStylesToSpan({ span: docSpan, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle, isAlreadyBold })
                     elements.push(docSpan);
                 }
                 curr_node = curr_node.nextSibling as ChildNode;
@@ -192,9 +202,10 @@ export const applyFontStyleToSelectedText = (params: TapplyFontStyleToSelectedTe
             }
         }
     } else {
+
         span = document.createElement('span');
         span.id = generateSpanId();
-        applyStylesToSpan({ span, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle })
+        applyStylesToSpan({ span, fontSize, isItalics, isBold, resetTextColorChanged, resetFontSizeChanged, selectedTextColor, fontSizeChanged, textColorChanged, selectedTextFontStyle, isAlreadyBold: false })
         span.textContent = selectedTextRange.toString();
         const selection = window.getSelection();
         if (selection) {

@@ -1,4 +1,5 @@
-import { TfontSizeAndType } from '@/lib/interfaces'
+
+import { TfontSizeAndType } from '@/types/typing'
 import { create } from 'zustand'
 
 type State = {

@@ -4,9 +4,10 @@ import React from 'react'
 import { Palette } from "lucide-react"
 import { cn } from '@/lib/utils';
 import { ColorResult, SketchPicker } from 'react-color';
-import { FontColorChangerProps } from '@/lib/interfaces';
+
 import { useTextColorStore } from '@/Store/useTextColorStore';
 import { useTextSelectionStore } from '@/Store/useSelectText';
+import { FontColorChangerProps } from '@/types/typing';
 
 
 export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPaletteOpen, setColorPaletteOpen }) => {
