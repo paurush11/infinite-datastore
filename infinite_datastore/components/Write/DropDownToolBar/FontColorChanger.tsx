@@ -8,10 +8,12 @@ import { ColorResult, SketchPicker } from 'react-color';
 import { useTextColorStore } from '@/Store/useTextColorStore';
 import { useTextSelectionStore } from '@/Store/useSelectText';
 import { FontColorChangerProps } from '@/types/typing';
+import { usePaintStore } from '@/Store/usePaintStore';
 
 
-export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPaletteOpen, setColorPaletteOpen }) => {
+export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPaletteOpen, setColorPaletteOpen, isPaint }) => {
     const colorStore = useTextColorStore()
+    const { update } = usePaintStore();
     const { isTextSelected, setSelectedTextColor } = useTextSelectionStore();
     return (
         <DropdownMenu open={colorPaletteOpen} onOpenChange={setColorPaletteOpen}>
@@ -31,11 +33,16 @@ export const FontColorChanger: React.FC<FontColorChangerProps> = ({ colorPalette
                             color={colorStore.color.rgb}
                             onChange={() => { }}
                             onChangeComplete={(color: ColorResult, event) => {
-                                if (isTextSelected) {
-                                    setSelectedTextColor(color);
+                                if (isPaint) {
+                                    update(color);
                                 } else {
-                                    colorStore.update(color);
+                                    if (isTextSelected) {
+                                        setSelectedTextColor(color);
+                                    } else {
+                                        colorStore.update(color);
+                                    }
                                 }
+
                             }}
                         />
 

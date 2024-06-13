@@ -1,41 +1,42 @@
+import { usePaintStore } from '@/Store/usePaintStore';
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuGroup, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { PaintWidthChangerProps } from '@/types/typing';
+import { AArrowUp } from 'lucide-react';
 import React from 'react'
-import { AArrowUp } from "lucide-react"
-import { calculateSize, useFontSizeStore } from '@/Store/useFontSizeStore';
-import { useTextSelectionStore } from '@/Store/useSelectText';
-import { FontSizeChangerProps } from '@/types/typing';
 
+export const PaintWidthChanger: React.FC<PaintWidthChangerProps> = ({ paintWidthOpen, setPaintWidthOpen }) => {
+    const generateBox = (thickness: number) => {
+        return <div className="flex bg-black w-full" style={{
+            padding: thickness * 1.5,
+            height: 3
+        }}>
+        </div>
+    }
+    const items = Array.from({ length: 6 }, (_, i) => {
+        return generateBox(i);
+    })
 
-// Base line height for text-sm
-const maxTypes = 6;
+    const generateBrushSize = (idx: number) => idx !== 0 ? idx * 1.15 : 1;
 
-export const FontSizeChanger: React.FC<FontSizeChangerProps> = ({ fontSizeOpen, setFontSizeOpen }) => {
-    const items = Array.from({ length: maxTypes }, (_, i) => calculateSize(i));
-    const fontStore = useFontSizeStore();
-    const { isTextSelected, setSelectedTextFontSize } = useTextSelectionStore();
+    const { setPaintWidth } = usePaintStore();
     return (
-        <DropdownMenu open={fontSizeOpen} onOpenChange={setFontSizeOpen}>
+        <DropdownMenu open={paintWidthOpen} onOpenChange={setPaintWidthOpen}>
             <DropdownMenuTrigger asChild>
                 <Button className='p-2 m-4' variant="outline" size="icon" >
                     <AArrowUp className="h-4 w-4" />
                 </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-                <DropdownMenuLabel className=' text-red-500'>Font Size</DropdownMenuLabel>
+                <DropdownMenuLabel className=' text-red-500'>Brush Size</DropdownMenuLabel>
                 <DropdownMenuGroup>
                     <DropdownMenuSeparator />
                     {
                         items && items.map((val, idx) => {
                             return <DropdownMenuItem key={idx} onClick={() => {
-                                if (isTextSelected) {
-                                    setSelectedTextFontSize(val);
-                                } else {
-                                    fontStore.update(val);
-                                }
-
+                                setPaintWidth(generateBrushSize(idx));
                             }}>
-                                {val.fontSize}
+                                {val}
                             </DropdownMenuItem>
                         })
 
@@ -48,4 +49,3 @@ export const FontSizeChanger: React.FC<FontSizeChangerProps> = ({ fontSizeOpen, 
         </DropdownMenu>
     );
 }
-

@@ -7,41 +7,63 @@ import { useDraw } from './useDraw';
 import { Draw, PaintAreaProps } from '@/types/typing';
 import { defaultColor } from '@/Store/useTextColorStore';
 import { usePaintStore } from '@/Store/usePaintStore';
-
+import { io } from "socket.io-client"
+import { drawLine } from './Logic';
 
 export const PaintArea: React.FC<PaintAreaProps> = ({ }) => {
-    const [color, setColor] = useState(defaultColor.hex)
+    const { isClear, setIsClear, color, paintWidth } = usePaintStore();
     const operationStore = useOperationStore();
-    
-    const drawLine = ({ prevPoint, currentPoint, ctx }: Draw) => {
-        const { x: currX, y: currY } = currentPoint
-        const lineColor = color
-        const lineWidth = 1
+    const socket = io('http://localhost:3001')
 
-        let startPoint = prevPoint ?? currentPoint
-        ctx.beginPath()
-        ctx.lineWidth = lineWidth
-
-        ctx.moveTo(startPoint.x, startPoint.y)
-        ctx.lineTo(currX, currY)
-        ctx.strokeStyle = lineColor
-        ctx.stroke()
-
-        ctx.beginPath()
-        ctx.arc(startPoint.x, startPoint.y, 2, 0, 2 * Math.PI)
-        ctx.fill()
+    const createLine = ({ prevPoint, currentPoint, ctx }: Draw) => {
+        socket.emit("draw-line", ({ prevPoint, currentPoint, color, paintWidth }))
+        drawLine({ prevPoint, currentPoint, ctx, color, paintWidth });
     }
-    const { isClear, setIsClear } = usePaintStore();
 
-    const { canvasRef, onMouseDown, clear } = useDraw(drawLine)
 
+
+    const { canvasRef, onMouseDown, clear } = useDraw(createLine)
+    useEffect(() => {
+        const ctx = canvasRef.current?.getContext('2d')
+
+        socket.emit("client-ready")
+
+        socket.on("get-canvas-state", () => {
+            if (!canvasRef.current?.toDataURL()) return;
+            socket.emit("canvas-state", canvasRef.current.toDataURL())
+        })
+
+        socket.on("canvas-state-from-server", (state) => {
+            const img = new Image();
+            img.src = state;
+            img.onload = () => {
+                ctx?.drawImage(img, 0, 0);
+            }
+        })
+
+        socket.on("draw-line", ({ prevPoint, currentPoint, color, paintWidth }) => {
+            if (!ctx) return;
+            drawLine({ prevPoint, currentPoint, ctx, color, paintWidth });
+        })
+
+        socket.on("clear", clear);
+
+        return () => {
+            socket.off("get-canvas-state")
+            socket.off("canvas-state-from-server")
+            socket.off("draw-line")
+            socket.off("clear")
+        }
+
+    }, [canvasRef])
     useEffect(() => {
         if (isClear === true) {
+            socket.emit("clear")
             clear();
             setIsClear();
-            console.log("here")
         }
     }, [isClear])
+
     return (
         <div className="flex bg-slate-800 items-center justify-center" style={{
             transition: 'flex-grow 0.5s ease',
@@ -66,15 +88,7 @@ export const PaintArea: React.FC<PaintAreaProps> = ({ }) => {
                 }}>
                 <ChevronLeft className="h-4 w-4" />
             </Button>
-            <Button variant="custom" size="icon"
-                className={cn({
-                    'hidden': operationStore.operation === "Empty" || operationStore.operation === "Write"
-                })}
-                onClick={() => {
 
-                }}>
-
-            </Button>
             <div className={cn('overflow-hidden', {
                 'hidden': operationStore.operation !== "Paint",
                 'flex w-full flex̦-1 h-full p-10': operationStore.operation === "Paint",

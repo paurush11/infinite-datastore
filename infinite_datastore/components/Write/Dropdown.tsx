@@ -11,6 +11,7 @@ import { FontStyleChanger } from './DropDownToolBar/FontStyleChanger';
 import { ListTypeChanger } from './DropDownToolBar/ListTypeChanger';
 import { DropdownProps, TfontSizeAndType } from '@/types/typing';
 import { usePaintStore } from '@/Store/usePaintStore';
+import { PaintWidthChanger } from './DropDownToolBar/PaintWidthChanger';
 
 
 
@@ -18,6 +19,8 @@ export const Dropdown: React.FC<DropdownProps> = ({ }) => {
     const [fontStyleOpen, setFontStyleOpen] = useState<boolean>(false)
     const [listTypeOpen, setListTypeOpen] = useState<boolean>(false)
     const [colorPaletteOpen, setColorPaletteOpen] = useState<boolean>(false)
+    const [paintWidthOpen, setPaintWidthOpen] = useState<boolean>(false)
+    const [colorPaletteOpenPaint, setColorPaletteOpenPaint] = useState<boolean>(false)
     const [fontSizeOpen, setFontSizeOpen] = useState<boolean>(false)
     const [value, setValue] = useState<boolean>(false)
     const [fontSize, setFontSize] = useState<TfontSizeAndType>(defaultSize);
@@ -36,7 +39,7 @@ export const Dropdown: React.FC<DropdownProps> = ({ }) => {
                 <Button className='p-2 m-4' variant="outline" size="icon" >
                     <Table className="h-4 w-4" />
                 </Button>
-                <FontColorChanger colorPaletteOpen={colorPaletteOpen} setColorPaletteOpen={setColorPaletteOpen} ></FontColorChanger>
+                <FontColorChanger isPaint={false} colorPaletteOpen={colorPaletteOpen} setColorPaletteOpen={setColorPaletteOpen} ></FontColorChanger>
                 <Button className='p-2 m-4' variant={value ? "custom" : "outline"} onClick={() => setValue(!value)} size="icon" >
                     <PaintRoller className="h-4 w-4" />
                 </Button>
@@ -58,11 +61,14 @@ export const Dropdown: React.FC<DropdownProps> = ({ }) => {
                 'hidden': operationStore.operation !== "Paint",
             })}
             >
+
                 <Button className='p-2 m-4' variant={isClear ? "custom" : "outline"} onClick={() => {
                     setIsClear()
                 }} size="icon" >
                     <Cross className="h-4 w-4" />
                 </Button>
+                <FontColorChanger isPaint={true} colorPaletteOpen={colorPaletteOpenPaint} setColorPaletteOpen={setColorPaletteOpenPaint} ></FontColorChanger>
+                <PaintWidthChanger setPaintWidthOpen={setPaintWidthOpen} paintWidthOpen={paintWidthOpen}></PaintWidthChanger>
             </div>
         </>
 

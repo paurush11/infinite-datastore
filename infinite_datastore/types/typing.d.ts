@@ -19,8 +19,14 @@ type PaintAreaProps = {
 
 }
 type FontColorChangerProps = {
+    isPaint: boolean
     colorPaletteOpen: boolean
     setColorPaletteOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+type PaintWidthChangerProps = {
+    paintWidthOpen: boolean
+    setPaintWidthOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 type TfontSizeAndType = {
